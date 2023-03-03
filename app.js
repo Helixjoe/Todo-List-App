@@ -4,6 +4,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 const app = express();
 
+app.set("view engine", "ejs");
+
 app.get("/", function (req, res) {
   req.send("hello");
 });
