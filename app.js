@@ -3,6 +3,7 @@ const app = express();
 //body-parser
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static("public"));
 
 app.set("view engine", "ejs");
 let itemList = ["Buy groceries", "Go to the Gym", "Sleep early"];
