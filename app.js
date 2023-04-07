@@ -7,7 +7,8 @@ app.use(express.static("public"));
 
 app.set("view engine", "ejs");
 let itemList = ["Buy groceries", "Go to the Gym", "Sleep early"];
-app.get("/", function (req, res) {
+let workItemsList = ["Finish the feature"];
+app.get("/", (req,res) => {
   let today = new Date();
 
   let options = {
@@ -20,11 +21,28 @@ app.get("/", function (req, res) {
   res.render("list", { kindOfDay: day, newTasks: itemList });
 });
 
-app.post("/", function (req, res) {
+app.post("/", (req, res)=> {
   let newItem = req.body.textBox;
-  itemList.push(newItem);
-  res.redirect("/");
+  if(req.body.submit === "work")
+  {
+    workItemsList.push(newItem);
+    res.redirect("/work");
+  }
+  else
+  {
+    itemList.push(newItem);
+    res.redirect("/");
+  }
+  
+
+  // workItemsList.push(newItem);
+  // res.redirect("/work");
 });
+
+app.get("/work", (req,res)=>{
+  res.render("list", { kindOfDay: "Work", newTasks: workItemsList});
+})
+
 app.listen(3000, function () {
   console.log("Server started at port 3000");
 });
