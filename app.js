@@ -43,6 +43,9 @@ app.get("/work", (req,res)=>{
   res.render("list", { kindOfDay: "Work", newTasks: workItemsList});
 })
 
+app.get("/about", (req,res)=>{
+  res.render("about");
+})
 app.listen(3000, function () {
   console.log("Server started at port 3000");
 });
