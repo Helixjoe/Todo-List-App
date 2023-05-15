@@ -32,6 +32,13 @@ const item3 = new Item({
 
 const defaultItems = [item1, item2, item3];
 
+const listSchema = {
+  name: String,
+  items: [itemsSchema]
+}
+
+const List = mongoose.model("list", listSchema);
+
 app.get("/", (req, res) => {
   async function run() {
     const foundItems = await Item.find();
@@ -72,6 +79,26 @@ app.post("/delete", (req, res) => {
 
 app.get("/work", (req, res) => {
   res.render("list", { kindOfDay: "Work", newTasks: workItemsList });
+})
+
+app.get("/:customListName", (req, res) => {
+  const customListName = req.params.customListName;
+  async function checkIfExists() {
+    const foundList = await List.findOne({ name: customListName });
+    if (!foundList) {
+      const list = new List({
+        name: customListName,
+        items: defaultItems
+      })
+      list.save();
+      res.redirect("/" + customListName);
+    }
+    else {
+      res.render("list", { kindOfDay: foundList.name, newTasks: foundList.items });
+    }
+  };
+  checkIfExists();
+
 })
 
 app.get("/about", (req, res) => {
