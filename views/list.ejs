@@ -1,23 +1,28 @@
 <%- include('header'); -%>
+
   <body>
 
     <div class="box" id="heading">
-      <h1><%= kindOfDay %></h1>
+      <h1>
+        <%= kindOfDay %>
+      </h1>
     </div>
 
     <div class="box">
-      <% for(let i = 0; i<newTasks.length;i++){%> 
-        <div class = "item">
+      <% newTasks.forEach(function(task){%>
+        <div class="item">
           <input type="checkbox">
-            <p><%= newTasks[i]%></p>
+          <p>
+            <%= task.name%>
+          </p>
         </div>
-        <% }%>
-     <form action="/" method="post">
-      <input type="text" name="textBox" placeholder="New Item"/>
-      <button type="submit" name="submit" value="work">+</button>
-    </form>
-    </div> 
-    
+        <%});%>
+          <form action="/" method="post">
+            <input type="text" name="textBox" placeholder="New Item" />
+            <button type="submit" name="submit" value="work">+</button>
+          </form>
+    </div>
+
   </body>
 
   <%- include('footer'); -%>
