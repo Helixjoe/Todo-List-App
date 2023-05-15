@@ -59,8 +59,15 @@ app.post("/", (req, res) => {
   })
   item.save();
   res.redirect("/");
+});
 
-
+app.post("/delete", (req, res) => {
+  const checkedBoxId = req.body.checkbox;
+  async function del() {
+    await Item.findByIdAndRemove(checkedBoxId);
+  };
+  del();
+  res.redirect("/");
 });
 
 app.get("/work", (req, res) => {
