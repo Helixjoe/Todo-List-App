@@ -50,10 +50,10 @@ app.get("/", (req, res) => {
         .catch(function (err) {
           console.log(err);
         });
-      res.render("list", { kindOfDay: "Today", newTasks: defaultItems });
+      res.render("list", { listName: "Today", newTasks: defaultItems });
     }
     else {
-      res.render("list", { kindOfDay: "Today", newTasks: foundItems });
+      res.render("list", { listName: "Today", newTasks: foundItems });
     }
   }
   run();
@@ -61,11 +61,25 @@ app.get("/", (req, res) => {
 
 app.post("/", (req, res) => {
   const itemName = req.body.textBox;
+  const listName = req.body.listName;
   const item = new Item({
     name: itemName
   })
-  item.save();
-  res.redirect("/");
+  async function find() {
+    const foundItem = await List.findOne({ name: listName }).exec();
+    if (foundItem != null) {
+      foundItem.items.push(item);
+      foundItem.save();
+      res.redirect("/" + listName);
+    }
+  }
+  if (listName === "Today") {
+    item.save();
+    res.redirect("/");
+  }
+  else {
+    find();
+  }
 });
 
 app.post("/delete", (req, res) => {
@@ -78,7 +92,7 @@ app.post("/delete", (req, res) => {
 });
 
 app.get("/work", (req, res) => {
-  res.render("list", { kindOfDay: "Work", newTasks: workItemsList });
+  res.render("list", { listName: "Work", newTasks: workItemsList });
 })
 
 app.get("/:customListName", (req, res) => {
@@ -94,7 +108,7 @@ app.get("/:customListName", (req, res) => {
       res.redirect("/" + customListName);
     }
     else {
-      res.render("list", { kindOfDay: foundList.name, newTasks: foundList.items });
+      res.render("list", { listName: foundList.name, newTasks: foundList.items });
     }
   };
   checkIfExists();
