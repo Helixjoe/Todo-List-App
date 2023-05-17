@@ -84,11 +84,19 @@ app.post("/", (req, res) => {
 
 app.post("/delete", (req, res) => {
   const checkedBoxId = req.body.checkbox;
+  const listName = req.body.listName;
   async function del() {
-    await Item.findByIdAndRemove(checkedBoxId);
+    if (listName === "Today") {
+      await Item.findByIdAndRemove(checkedBoxId);
+      res.redirect("/");
+    }
+    else {
+      await List.findOneAndUpdate({ name: listName }, { $pull: { items: { _id: checkedBoxId } } });
+      res.redirect("/" + listName);
+    }
   };
   del();
-  res.redirect("/");
+
 });
 
 app.get("/work", (req, res) => {
