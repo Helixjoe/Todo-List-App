@@ -126,9 +126,9 @@ app.get("/:customListName", (req, res) => {
 app.get("/about", (req, res) => {
   res.render("about");
 })
-mongoose.connect(){
-  app.listen(3000, function () {
-    console.log("Server started at port 3000");
-  });
-}
+
+app.listen(3000, function () {
+  console.log("Server started at port 3000");
+});
+
 
