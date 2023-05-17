@@ -1,7 +1,7 @@
 const express = require("express");
 const date = require(__dirname + "/date.js");
 const mongoose = require("mongoose");
-
+const _ = require("lodash");
 const app = express();
 //body-parser
 app.use(express.json());
@@ -104,7 +104,7 @@ app.get("/work", (req, res) => {
 })
 
 app.get("/:customListName", (req, res) => {
-  const customListName = req.params.customListName;
+  const customListName = _.capitalize(req.params.customListName);
   async function checkIfExists() {
     const foundList = await List.findOne({ name: customListName });
     if (!foundList) {
